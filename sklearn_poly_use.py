@@ -143,10 +143,3 @@ def LassoRegression(degree,alpha):
 lasso_reg_1 = LassoRegression(20,0.01);
 lasso_reg_1.fit(x_train,y_train);
 y_predict = lasso_reg_1.predict(x_test);
-
-
-
-
-
-
-#python sklearn_poly_use.py
