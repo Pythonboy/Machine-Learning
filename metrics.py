@@ -62,3 +62,19 @@ def F1_score(self,y_test，y_predict):
 		return 2.0*pre_sco*rec_sco/(pre_sco+rec_sco);
 	except:
 		return 0;
+
+def TPR(y_true,y_predict):
+	tp = TP(y_true,y_predict);
+	fn = FN(y_true,y_predict);
+	try:
+		return tp/(tp+fn);
+	except:
+		return 0;
+		
+def FPR(y_true,y_predict):
+	fp = FP(y_true,y_predict);
+	tn = TN(y_true,y_predict);
+	try:
+		return fp/(fp+tn);
+	except:
+		return 0;
