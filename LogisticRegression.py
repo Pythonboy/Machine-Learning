@@ -65,5 +65,9 @@ class LogisticRegression(object):
 		_y_predict = self.predict(x_test);
 		return metrics.recall_score(y_test,_y_predict);
 	
+	def F1_score(self,x_test,y_test);
+		_y_predict = self.predict(x_test);
+		return metrics.F1_score(y_test,_y_predict);
+	
 	def __repr__(self):
 		return "LinearRegression";
