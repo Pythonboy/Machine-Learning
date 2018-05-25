@@ -55,9 +55,9 @@ def recall_score(y_true,y_predict):
 		return TP(y_true,y_predict)/(FN(y_true,y_predict)+TP(y_true,y_predict));
 	except:
 		return 0;
-def F1_score(self,x_test,y_test):
-	pre_sco = precision_score(x_test,y_test);
-	rec_sco = recall_score(x_test,y_test);
+def F1_score(self,y_test，y_predict):
+	pre_sco = precision_score(y_test，y_predict);
+	rec_sco = recall_score(y_test,y_predict);
 	try:
 		return 2.0*pre_sco*rec_sco/(pre_sco+rec_sco);
 	except:
