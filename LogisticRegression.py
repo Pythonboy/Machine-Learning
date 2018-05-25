@@ -1,4 +1,5 @@
 import numpy as np
+import metrics
 
 class LogisticRegression(object):
 	def __init__(self):
@@ -48,10 +49,21 @@ class LogisticRegression(object):
 		proba = self._predict_proba(X_test);
 		return np.array(proba>=0.5,dtype = 'int');
 
-	def score(self,x_test,y_test):
+	def accuracy_score(self,x_test,y_test):
 		_y_predict = self.predict(x_test);
-		sco = 1.0*sum(_y_predict==y_test)/len(y_test);
-		return sco;
+		return metrics.accuracy_score(y_test,_y_predict);
+		
+	def precision_score(self,x_test,y_test):
+		_y_predict = self.predict(x_test);
+		return metrics.precision_score(y_test,_y_predict);
+		
+	def confusion_matrix(self,x_test,y_test):
+		_y_predict = self.predict(x_test);
+		return metrics.Confusion_Matrix(y_test,_y_predict);
+		
+	def recall_score(self,x_test,y_test):
+		_y_predict = self.predict(x_test);
+		return metrics.recall_score(y_test,_y_predict);
 	
 	def __repr__(self):
 		return "LinearRegression";
