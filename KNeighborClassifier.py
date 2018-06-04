@@ -17,7 +17,7 @@ class KNNClassifier(object):
 	#训练集拟合过程
 	def fit(self,X_train,Y_train):
 		assert X_train.shape[0] == Y_train.shape[o];    #判断X_train训练集和Y_train结果的行数相同；
-		assert k <= X_train.shape[0];    #判断K值要小于训练集的样本数
+		assert self.k <= X_train.shape[0];    #判断K值要小于训练集的样本数
 		self._x_train = X_train;         
 		self._y_train = Y_train;
 		return self;
