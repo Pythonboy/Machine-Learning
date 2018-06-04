@@ -1,3 +1,8 @@
+'''
+作者：楼浩然
+功能：用于评价机器学习中的分类算法和回归算法
+'''
+
 import numpy as np
 from math import sqrt
 
@@ -16,7 +21,8 @@ def r2_score(y_test,y_predict):
 def r2_score(y_test,y_predict):
 	return 1-Mean_Squared_Error(y_test,y_predict)/np.var(y_test);
 
-def accuracy_score(y_test,y_predict):
+#用于评价分类算法的准确度：即预测成功的结果占给出的测试集结果的比列；例如可用于KNN分类算法中
+def accuracy_score(y_test,y_predict):      
 	return 1.0*np.sum(y_test==y_predict)/len(y_test);
 	
 def TN(y_true,y_predict):
