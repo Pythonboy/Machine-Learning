@@ -1,13 +1,20 @@
+'''
+作者：楼浩然
+功能：通过正规方程解和梯度下降法进行线性回归拟合
+'''
+
 import numpy as np
 from metrics import r2_score
 
 class LinearRegression(object):
 	def __init__(self):
+	'''初始化线性回归模型 '''
 		self.coef_ = None;
 		self.inter_ = None;
 		self._theta = None;
 		
 	def fit_normal(self,X_train,y_train):
+	'''通过正规方程解公式求出线性回归模型中相应的系数向量  '''
 		assert len(X_train)==len(y_train);
 		X_b = np.hstack([np.ones([len(X_train),1]),X_train]);
 		self._theta = ((np.linalg.inv(X_b.T.dot(X_b))).dot(X_b.T)).dot(y_train);
@@ -78,6 +85,7 @@ class LinearRegression(object):
 		return self;
 		
 	def predict(self,X_test):
+	'''线性回归预测结果 '''
 		X_b = np.hstack([np.ones([len(X_test),1]),X_test]);
 		y_predict = X_b.dot(self._theta);
 		return y_predict;
