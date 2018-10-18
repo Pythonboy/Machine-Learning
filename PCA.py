@@ -1,54 +1,68 @@
-import numpy as np
-import numpy as np
+class PCA:
 
-class PCA(object):
-	def __init__(self,n_components):
-		self.n_components = n_components;
-		self.components_ = None;
-	
-	def gradientascent(self,X,initial_w,eta=0.01,n_iters = 1e4,epsilon = 1e-8):
+    def __init__(self, n_components):
+        """初始化PCA"""
+        assert n_components >= 1, "n_components must be valid"
+        self.n_components = n_components
+        self.components_ = None
 
-		def J(X,w):
-			return np.sum((X.dot(w))**2)/len(X);
-		def dJ(X,w):
-			return X.T.dot(X.dot(w))*2./len(X);
-		def direction(w):
-			return w/np.linalg.norm(w);
-		w = direction(initial_w);
-		i_iters = 0;
-		while i_iters<n_iters:
-			gradient = dJ(X,w);
-			last_w = w;
-			w = w+eta*gradient;
-			w = direction(w);
-			if abs(J(X,last_w)-J(X,w))<epsilon:
-				break;
-			i_iters+=1;
-		return w;
+    def fit(self, X, eta=0.01, n_iters=1e4):
+        """获得数据集X的前n个主成分"""
+        assert self.n_components <= X.shape[1], \
+            "n_components must not be greater than the feature number of X"
+
+        def demean(X):
+            return X - np.mean(X, axis=0)
+
+        def f(w, X):
+            return np.sum((X.dot(w) ** 2)) / len(X)
+
+        def df(w, X):
+            return X.T.dot(X.dot(w)) * 2. / len(X)
+
+        def direction(w):
+            return w / np.linalg.norm(w)
+
+        def first_component(X, initial_w, eta=0.01, n_iters=1e4, epsilon=1e-8):
+
+            w = direction(initial_w)
+            cur_iter = 0
+
+            while cur_iter < n_iters:
+                gradient = df(w, X)
+                last_w = w
+                w = w + eta * gradient
+                w = direction(w)
+                if (abs(f(w, X) - f(last_w, X)) < epsilon):
+                    break
+
+                cur_iter += 1
+
+            return w
+
+        X_pca = demean(X)
+        self.components_ = np.empty(shape=(self.n_components, X.shape[1]))
+        for i in range(self.n_components):
+            initial_w = np.random.random(X_pca.shape[1])
+            w = first_component(X_pca, initial_w, eta, n_iters)
+            self.components_[i,:] = w
+
+            X_pca = X_pca - X_pca.dot(w).reshape(-1, 1) * w
+
+        return self
+
+    def transform(self, X):
+        """将给定的X，映射到各个主成分分量中"""
+        assert X.shape[1] == self.components_.shape[1]
+
+        return X.dot(self.components_.T)
+
+    def inverse_transform(self, X):
+        """将给定的X，反向映射回原来的特征空间"""
+        assert X.shape[1] == self.components_.shape[0]
+
+        return X.dot(self.components_)
+
+    def __repr__(self):
+        return "PCA(n_components=%d)" % self.n_components
 		
-	def fit(self,X_origin,eta=0.01,n_iters=1e4,epsilon = 1e-8):
-		self.components_ = np.empty((self.n_components,X_origin.shape[1]));
-		def new_datasets(X,w):
-			x2 = X-X.dot(w).reshape(-1,1)*w;
-			return x2;
-		def demean(X):
-			return X-np.mean(X,axis = 0);
-		x_pca = X_origin.copy();
-		x_pca = demean(x_pca);
-		for i in range(self.n_components):
-			w = np.random.random(x_pca.shape[1]);
-			w = self.gradientascent(x_pca,w,eta,n_iters,epsilon);
-			self.components_[i,:] = w;
-			x_pca = new_datasets(x_pca,w);
-		return self;
-
-	def transform(self,X):
-		return X.dot(self.components_.T);
-		
-	def inverse_transform(self,X):
-		return X.dot(self.components_);
-	
-	def __repr__(self):
-		print("PCA")
-
-				
